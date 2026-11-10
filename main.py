@@ -1,7 +1,7 @@
 import pygame
 import random
 import sys
-from Recursos.funcoes import inicializarBancoDeDados, limpar_tela, escreverDados
+from Recursos.funcoes import inicializarBancoDeDados, limpar_tela, escreverDados, maior_pontuador
 from Recursos.trabalho import verificarColisao, patenteDoAstronauta
 
 limpar_tela()
@@ -28,6 +28,7 @@ amarelo = (255, 220, 80)
 
 fundo = pygame.image.load("bases/fundo.png")
 fundoFim = pygame.image.load("bases/fundoFim.png")
+fundoInicio = pygame.image.load("bases/fundoInicio.png")
 
 astronauta = pygame.image.load("bases/astronauta.png")
 astronauta = pygame.transform.scale(astronauta, (80, 80))
@@ -141,20 +142,77 @@ def fimDeJogo(pontos):
 
         tela.blit(fundoFim, (0, 0))
         texto = fonteGrande.render("GAME OVER", True, branco)
-        tela.blit(texto, (330, 120))
+        tela.blit(texto, (500 - texto.get_width() / 2, 120))
         texto = fonte.render("Voce desviou de " + str(pontos) + " meteoros!", True, amarelo)
         tela.blit(texto, (360, 480))
         texto = fonte.render("Patente: " + patenteDoAstronauta(pontos), True, branco)
         tela.blit(texto, (360, 520))
 
         botao = pygame.draw.rect(tela, branco, (400, 580, 200, 50), border_radius=15)
-        texto = fonte.render("Jogar Novamente", True, preto)
-        tela.blit(texto, (415, 592))
+        texto = fonte.render("Continuar", True, preto)
+        tela.blit(texto, (500 - texto.get_width() / 2, 592))
+
+        pygame.display.update()
+        relogio.tick(60)
+
+
+def boasVindas():
+    # busca o melhor jogador salvo no banco
+    nome_maior, maior_pontos, dataJogada, horaJogada = maior_pontuador()
+
+    larguraBotao = 220
+    alturaBotao = 60
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                sair()
+            elif evento.type == pygame.MOUSEBUTTONDOWN:
+                if botao.collidepoint(evento.pos):
+                    larguraBotao = 210
+                    alturaBotao = 55
+            elif evento.type == pygame.MOUSEBUTTONUP:
+                larguraBotao = 220
+                alturaBotao = 60
+                if botao.collidepoint(evento.pos):
+                    return
+
+        tela.blit(fundoInicio, (0, 0))
+
+        texto = fonteGrande.render("ASTRONAUTA PERDIDO", True, amarelo)
+        tela.blit(texto, (500 - texto.get_width() / 2, 50))
+        texto = fonte.render("Bem-vindo(a), " + nome + "!", True, branco)
+        tela.blit(texto, (60, 160))
+
+        # explicacao rapida da mecanica
+        texto = fonte.render("Como jogar:", True, amarelo)
+        tela.blit(texto, (60, 220))
+        texto = fonte.render("- Use as SETAS do teclado para mover o astronauta.", True, branco)
+        tela.blit(texto, (60, 260))
+        texto = fonte.render("- Desvie dos meteoros que vem da direita.", True, branco)
+        tela.blit(texto, (60, 295))
+        texto = fonte.render("- Cada meteoro que passar vale 1 ponto. Eles ficam cada vez mais rapidos!", True, branco)
+        tela.blit(texto, (60, 330))
+        texto = fonte.render("- Se encostar em um meteoro, e fim de jogo.", True, branco)
+        tela.blit(texto, (60, 365))
+
+        # melhor jogador
+        texto = fonte.render("Recorde: " + nome_maior + " - " + str(maior_pontos) + " pontos", True, amarelo)
+        tela.blit(texto, (60, 425))
+        texto = fonte.render("Data: " + dataJogada + "   Hora: " + horaJogada, True, amarelo)
+        tela.blit(texto, (60, 460))
+
+        # unico botao: iniciar partida (para fechar usa o X da janela)
+        botaoX = 500 - larguraBotao / 2
+        botaoY = 560 - alturaBotao / 2
+        botao = pygame.draw.rect(tela, branco, (botaoX, botaoY, larguraBotao, alturaBotao), border_radius=15)
+        texto = fonte.render("Iniciar Partida", True, preto)
+        tela.blit(texto, (500 - texto.get_width() / 2, 560 - texto.get_height() / 2))
 
         pygame.display.update()
         relogio.tick(60)
 
 
 while True:
+    boasVindas()
     pontos = jogar()
     fimDeJogo(pontos)
