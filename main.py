@@ -1,8 +1,14 @@
 import pygame
 import random
 import sys
+import os
 from Recursos.funcoes import inicializarBancoDeDados, limpar_tela, escreverDados, maior_pontuador
 from Recursos.trabalho import verificarColisao, patenteDoAstronauta
+
+# quando o jogo roda pelo executavel, entra na pasta do executavel
+# para conseguir achar a pasta bases/
+if hasattr(sys, "frozen"):
+    os.chdir(os.path.dirname(sys.executable))
 
 limpar_tela()
 inicializarBancoDeDados()
