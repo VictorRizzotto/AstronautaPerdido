@@ -9,7 +9,7 @@ adaptado a partir do jogo base Iron Man do professor
 | Nome completo | RA |
 |---|---|
 | Victor Augusto Rizzotto | 1140225 |
-| Davi Bassani Migliorini | PREENCHER_RA |
+| Davi Migliorini Bonissoni | 1140196 |
 
 ## História do jogo
 
