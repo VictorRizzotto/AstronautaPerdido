@@ -2,6 +2,7 @@ import pygame
 import random
 import sys
 from Recursos.funcoes import inicializarBancoDeDados, limpar_tela, escreverDados
+from Recursos.trabalho import verificarColisao, patenteDoAstronauta
 
 limpar_tela()
 inicializarBancoDeDados()
@@ -118,12 +119,10 @@ def jogar():
         texto = fonte.render("Pontos: " + str(pontos), True, branco)
         tela.blit(texto, (860, 15))
 
-        # colisao: compara os lados dos dois quadrados (com uma folga de 15 pixels)
-        folga = 15
-        if astronautaX + 80 - folga > meteoroX and astronautaX + folga < meteoroX + 70:
-            if astronautaY + 80 - folga > meteoroY and astronautaY + folga < meteoroY + 70:
-                escreverDados(nome, pontos)
-                return pontos
+        # colisao usando a funcao do arquivo trabalho.py
+        if verificarColisao(astronautaX, astronautaY, 80, 80, meteoroX, meteoroY, 70, 70, 15):
+            escreverDados(nome, pontos)
+            return pontos
 
         pygame.display.update()
         relogio.tick(60)
@@ -144,6 +143,8 @@ def fimDeJogo(pontos):
         texto = fonteGrande.render("GAME OVER", True, branco)
         tela.blit(texto, (330, 120))
         texto = fonte.render("Voce desviou de " + str(pontos) + " meteoros!", True, amarelo)
+        tela.blit(texto, (360, 480))
+        texto = fonte.render("Patente: " + patenteDoAstronauta(pontos), True, branco)
         tela.blit(texto, (360, 520))
 
         botao = pygame.draw.rect(tela, branco, (400, 580, 200, 50), border_radius=15)
