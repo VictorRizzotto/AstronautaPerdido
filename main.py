@@ -93,15 +93,9 @@ def jogar():
                     movimentoY = -velocidadeAstronauta
                 elif evento.key == pygame.K_DOWN:
                     movimentoY = velocidadeAstronauta
-                elif evento.key == pygame.K_LEFT:
-                    movimentoX = -velocidadeAstronauta
-                elif evento.key == pygame.K_RIGHT:
-                    movimentoX = velocidadeAstronauta
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_UP or evento.key == pygame.K_DOWN:
                     movimentoY = 0
-                elif evento.key == pygame.K_LEFT or evento.key == pygame.K_RIGHT:
-                    movimentoX = 0
 
         # realiza a pausa do jogo e apresenta a mensagem na tela
         if pausado:
