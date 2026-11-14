@@ -148,6 +148,8 @@ def jogar():
         tela.blit(meteoro, (meteoroX, meteoroY))
         texto = fonte.render("Pontos: " + str(pontos), True, branco)
         tela.blit(texto, (860, 15))
+        texto = fonte.render("Press Space to Pause Game.", True, branco)
+        tela.blit(texto, (20, 660))
 
         # colisao usando a funcao do arquivo trabalho.py
         if verificarColisao(astronautaX, astronautaY, 80, 80, meteoroX, meteoroY, 70, 70, 15):
