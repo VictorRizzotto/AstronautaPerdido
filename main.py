@@ -40,7 +40,7 @@ astronauta = pygame.image.load("bases/astronauta.png")
 astronauta = pygame.transform.scale(astronauta, (80, 80))
 meteoro = pygame.image.load("bases/meteoro.png")
 meteoro = pygame.transform.scale(meteoro, (70, 70))
-lua = pygame.image.load("bases/lua.png")
+lua = pygame.image.load("bases/lua.png").convert_alpha() 
 lua = pygame.transform.scale(lua, (90, 90))
 
 somMeteoro = pygame.mixer.Sound("bases/meteoro.wav")
