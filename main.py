@@ -133,13 +133,13 @@ def jogar():
 
         # animacao do sol
         if aumentandoSol:
-            raioSol = raioSol + 0.1
+            raioSol = raioSol + 0.2
 
         if raioSol >= 40:
             aumentandoSol = False
 
         else:
-            raioSol = raioSol - 0.1
+            raioSol = raioSol - 0.2
 
         if raioSol <= 30:
             aumentandoSol = True
@@ -178,7 +178,9 @@ def jogar():
         tela.fill(preto)
         tela.blit(fundo, (fundoX1, 0))
         tela.blit(fundo, (fundoX2, 0))
+
         pygame.draw.circle(tela, amarelo, (900, 100), int(raioSol))
+        
         tela.blit(lua, (luaX, luaY))
         tela.blit(astronauta, (astronautaX, astronautaY))
         tela.blit(meteoro, (meteoroX, meteoroY))
