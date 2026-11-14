@@ -107,12 +107,7 @@ def jogar():
             continue
 
         # move o astronauta e nao deixa sair da tela
-        astronautaX = astronautaX + movimentoX
         astronautaY = astronautaY + movimentoY
-        if astronautaX < 0:
-            astronautaX = 0
-        elif astronautaX > 920:
-            astronautaX = 920
         if astronautaY < 0:
             astronautaY = 0
         elif astronautaY > 620:
