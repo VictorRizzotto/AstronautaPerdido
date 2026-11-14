@@ -83,12 +83,12 @@ def jogar():
     meteoroY = random.randint(0, 630)
     velocidadeMeteoro = 5
     pontos = 0
-    raioSol = 30
-    aumentoSol = True
     pausado = False
     luaX = 1000
     luaY = random.randint(0, 610)
     velocidadeLua = 2
+    raioSol = 30
+    aumentandoSol = True
 
     pygame.mixer.music.play(-1)
     pygame.mixer.Sound.play(somMeteoro)
