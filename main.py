@@ -2,6 +2,8 @@ import pygame
 import random
 import sys
 import os
+import pyttsx3
+from datetime import datetime
 from Recursos.funcoes import inicializarBancoDeDados, limpar_tela, escreverDados, maior_pontuador
 from Recursos.trabalho import verificarColisao, patenteDoAstronauta
 
@@ -13,6 +15,7 @@ if hasattr(sys, "frozen"):
 limpar_tela()
 inicializarBancoDeDados()
 pygame.init()
+voz = pyttsx3.init()
 
 while True:
     nome = input("Digite seu nome de astronauta: ")
@@ -55,6 +58,18 @@ def sair():
     pygame.quit()
     sys.exit()
 
+def salvarLog(nome, pontos):
+    data = datetime.now().strftime("%d/%m/%Y")
+    hora = datetime.now().strftime("%H:%M:%S")
+
+    arquivo = open("log.dat", "a", encoding="utf-8")
+    arquivo.write("Nome: " + nome + "\n")
+    arquivo.write("Pontuacao: " + str(pontos) + "\n")
+    arquivo.write("Data: " + data + "\n")
+    arquivo.write("Hora: " + hora + "\n")
+    arquivo.write("--------------------------\n")
+    arquivo.close()
+
 
 def jogar():
     fundoX1 = 0
@@ -68,6 +83,8 @@ def jogar():
     meteoroY = random.randint(0, 630)
     velocidadeMeteoro = 5
     pontos = 0
+    raioSol = 30
+    aumentoSol = True
     pausado = False
     luaX = 1000
     luaY = random.randint(0, 610)
@@ -81,7 +98,10 @@ def jogar():
             if evento.type == pygame.QUIT:
                 sair()
             elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_SPACE:
+                if evento.key == pygame.K_ESCAPE:
+                    sair()
+
+                elif evento.key == pygame.K_SPACE:        
                     pausado = not pausado
 
                 elif not pausado:
@@ -110,6 +130,19 @@ def jogar():
             pygame.display.update()
             relogio.tick(60)
             continue
+
+        # animacao do sol
+        if aumentandoSol:
+            raioSol = raioSol + 0.1
+
+        if raioSol >= 40:
+            aumentandoSol = False
+
+        else:
+            raioSol = raioSol - 0.1
+
+        if raioSol <= 30:
+            aumentandoSol = True
 
         # move o astronauta e nao deixa sair da tela
         astronautaY = astronautaY + movimentoY
@@ -145,6 +178,7 @@ def jogar():
         tela.fill(preto)
         tela.blit(fundo, (fundoX1, 0))
         tela.blit(fundo, (fundoX2, 0))
+        pygame.draw.circle(tela, amarelo, (900, 100), int(raioSol))
         tela.blit(lua, (luaX, luaY))
         tela.blit(astronauta, (astronautaX, astronautaY))
         tela.blit(meteoro, (meteoroX, meteoroY))
@@ -156,6 +190,7 @@ def jogar():
         # colisao usando a funcao do arquivo trabalho.py
         if verificarColisao(astronautaX, astronautaY, 80, 80, meteoroX, meteoroY, 70, 70, 15):
             escreverDados(nome, pontos)
+            salvarLog(nome, pontos)
             return pontos
 
         pygame.display.update()
@@ -165,6 +200,9 @@ def jogar():
 def fimDeJogo(pontos):
     pygame.mixer.music.stop()
     pygame.mixer.Sound.play(somExplosao)
+    voz.say("Fim de jogo! Voce conseguiu desviar de " + str(pontos) + " meteoros.")
+    voz.runAndWait()
+    nomeMaior, maiorPontos, dataJogada, horaJogada = maior_pontuador()
     while True:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -172,6 +210,9 @@ def fimDeJogo(pontos):
             elif evento.type == pygame.MOUSEBUTTONUP:
                 if botao.collidepoint(evento.pos):
                     return
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    sair()    
 
         tela.blit(fundoFim, (0, 0))
         texto = fonteGrande.render("GAME OVER", True, branco)
@@ -180,6 +221,8 @@ def fimDeJogo(pontos):
         tela.blit(texto, (360, 480))
         texto = fonte.render("Patente: " + patenteDoAstronauta(pontos), True, branco)
         tela.blit(texto, (360, 520))
+        texto = fonte.render("Maior pontuador: " + nomeMaior + " - " + str(maiorPontos) + " pontos", True, amarelo)
+        tela.blit(texto, (300, 440))
 
         botao = pygame.draw.rect(tela, branco, (400, 580, 200, 50), border_radius=15)
         texto = fonte.render("Continuar", True, preto)
@@ -208,6 +251,9 @@ def boasVindas():
                 alturaBotao = 60
                 if botao.collidepoint(evento.pos):
                     return
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    sair()    
 
         tela.blit(fundoInicio, (0, 0))
 
