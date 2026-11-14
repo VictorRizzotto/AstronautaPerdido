@@ -40,6 +40,8 @@ astronauta = pygame.image.load("bases/astronauta.png")
 astronauta = pygame.transform.scale(astronauta, (80, 80))
 meteoro = pygame.image.load("bases/meteoro.png")
 meteoro = pygame.transform.scale(meteoro, (70, 70))
+lua = pygame.image.load("bases/lua.png")
+lua = pygame.transform.scale(lua, (90, 90))
 
 somMeteoro = pygame.mixer.Sound("bases/meteoro.wav")
 somExplosao = pygame.mixer.Sound("bases/explosao.wav")
@@ -67,6 +69,9 @@ def jogar():
     velocidadeMeteoro = 5
     pontos = 0
     pausado = False
+    luaX = 1000
+    luaY = random.randint(0, 610)
+    velocidadeLua = 2
 
     pygame.mixer.music.play(-1)
     pygame.mixer.Sound.play(somMeteoro)
@@ -122,6 +127,13 @@ def jogar():
             pontos = pontos + 1
             velocidadeMeteoro = velocidadeMeteoro + 1
 
+        # movimento da lua
+        luaX = luaX - velocidadeLua
+
+        if luaX < -90:
+            luaX = 1000
+            luaY = random.randint(0, 610)    
+
         # fundo andando
         fundoX1 = fundoX1 - 1
         fundoX2 = fundoX2 - 1
@@ -133,6 +145,7 @@ def jogar():
         tela.fill(preto)
         tela.blit(fundo, (fundoX1, 0))
         tela.blit(fundo, (fundoX2, 0))
+        tela.blit(lua, (luaX, luaY))
         tela.blit(astronauta, (astronautaX, astronautaY))
         tela.blit(meteoro, (meteoroX, meteoroY))
         texto = fonte.render("Pontos: " + str(pontos), True, branco)
