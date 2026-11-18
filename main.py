@@ -16,13 +16,7 @@ limpar_tela()
 inicializarBancoDeDados()
 pygame.init()
 voz = pyttsx3.init()
-
-while True:
-    nome = input("Digite seu nome de astronauta: ")
-    if len(nome) > 0:
-        break
-    else:
-        print("Nome Invalido!")
+    
 
 tamanho = (1000, 700)
 pygame.display.set_caption("Astronauta Perdido")
@@ -57,6 +51,67 @@ fonteGrande = pygame.font.SysFont("arial", 60, bold=True)
 def sair():
     pygame.quit()
     sys.exit()
+
+def telaIdentificacao():
+    nome = ""
+    mensagem = ""
+
+    campo = pygame.Rect(300, 330, 400, 55)
+    botao = pygame.Rect(400, 430, 200, 60)
+
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                sair()
+
+            elif evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    sair()
+
+                elif evento.key == pygame.K_BACKSPACE:
+                    nome = nome[:-1]
+
+                elif evento.key == pygame.K_RETURN:
+                    if len(nome.strip()) > 0:
+                        return nome
+                    else:
+                        mensagem = "Digite seu nome de astronauta!"
+
+            elif evento.type == pygame.TEXTINPUT:
+                nome = nome + evento.text
+
+            elif evento.type == pygame.MOUSEBUTTONUP:
+                if botao.collidepoint(evento.pos):
+                    if len(nome.strip()) > 0:
+                        return nome
+                    else:
+                        mensagem = "Digite seu nome de astronauta!"
+
+        tela.blit(fundoInicio, (0, 0))
+
+        texto = fonteGrande.render("ASTRONAUTA PERDIDO", True, amarelo)
+        tela.blit(texto, (500 - texto.get_width() / 2, 150))
+
+        texto = fonte.render("Digite seu nome de astronauta:", True, branco)
+        tela.blit(texto, (350, 280))
+
+        pygame.draw.rect(tela, branco, campo, border_radius=8)
+        pygame.draw.rect(tela, preto, campo, 3, border_radius=8)
+
+        texto = fonte.render(nome, True, preto)
+        tela.blit(texto, (campo.x + 12, campo.y + 13))
+
+        pygame.draw.rect(tela, amarelo, botao, border_radius=12)
+
+        texto = fonte.render("INICIAR", True, preto)
+        tela.blit(texto, (500 - texto.get_width() / 2, 448))
+
+        texto = fonte.render(mensagem, True, amarelo)
+        tela.blit(texto, (500 - texto.get_width() / 2, 515))
+
+        pygame.display.update()
+        relogio.tick(60)
+
 
 def salvarLog(nome, pontos):
     data = datetime.now().strftime("%d/%m/%Y")
@@ -292,6 +347,7 @@ def boasVindas():
         pygame.display.update()
         relogio.tick(60)
 
+nome = telaIdentificacao()
 
 while True:
     boasVindas()
