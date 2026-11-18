@@ -1,0 +1,6 @@
+README.md
+setup.py
+Astronauta_Perdido.egg-info/PKG-INFO
+Astronauta_Perdido.egg-info/SOURCES.txt
+Astronauta_Perdido.egg-info/dependency_links.txt
+Astronauta_Perdido.egg-info/top_level.txt
