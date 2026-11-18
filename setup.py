@@ -16,7 +16,8 @@ cx_Freeze.setup(
     description="Jogo Astronauta Perdido feito com Python e Pygame",
     options={
         "build_exe": {
-            "packages": ["pygame"],
+            "packages": ["pygame", "pyttsx3"],
+            "includes": ["pyttsx3.drivers.sapi5"],
             "include_files": ["bases", "Recursos"],
             "include_msvcr": True
         }
