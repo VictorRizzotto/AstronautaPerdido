@@ -17,7 +17,8 @@ cx_Freeze.setup(
     options={
         "build_exe": {
             "packages": ["pygame"],
-            "include_files": ["bases", "Recursos"]
+            "include_files": ["bases", "Recursos"],
+            "include_msvcr": True
         }
     },
     executables=executaveis
